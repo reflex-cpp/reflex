@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Part of the Reflex project.
+Copyright © Reflex Project Contributors.
+SPDX-License-Identifier: Apache-2.0
+-->
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="reflex::EnumIndexedArray&lt;*&gt;">
+        <Intrinsic Name="size" Expression="traits_t::count"/>
+        <DisplayString>{{ size = {size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <CustomListItems>
+                <Variable Name="idx" InitialValue="size_t(0)"/>
+                <Size>size()</Size>
+                <Loop>
+                    <Item Name="[{($T2)idx}]">_arr[idx]</Item>
+                    <Exec>++idx</Exec>
+                </Loop>
+            </CustomListItems>
+        </Expand>
+    </Type>
+
+    <!-- proper enum indexing for EnumIndexedTuple would require reimplementing std::tuple's visualizer -->
+    <Type Name="reflex::EnumIndexedTuple&lt;*&gt;">
+        <DisplayString>m_tuple</DisplayString>
+        <Expand>
+            <ExpandedItem>m_tuple</ExpandedItem>
+        </Expand>
+    </Type>
+
+    <Type Name="reflex::EnumIndexedVariant&lt;*&gt;">
+        <Expand>
+            <Item Name="[enumerator]">($T1)_Which</Item>
+            <ExpandedItem>*(variant_t *)this</ExpandedItem>
+        </Expand>
+    </Type>
+</AutoVisualizer>
